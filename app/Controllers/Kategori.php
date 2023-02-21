@@ -30,9 +30,55 @@ class Kategori extends BaseController
         $data = [
             'datakategori' => $dataKategori->paginate(2, 'kategori'),
             'pager' => $this->kategori->pager,
-            'nohalaman' => $noHalaman
+            'nohalaman' => $noHalaman,
+            'cari' => $cari
         ];
 
         return view('kategori/data', $data);
+    }
+
+    public function formTambah()
+    {
+        if ($this->request->isAJAX()) {
+            $msg = [
+                'data' => view('kategori/modalformtambah')
+            ];
+
+            echo json_encode($msg);
+        } else {
+            exit('Maaf, tidak ada halaman yang bisa ditampilkan');
+        }
+    }
+
+    public function simpanData()
+    {
+        if ($this->request->isAJAX()) {
+            $namakategori = $this->request->getVar('namakategori');
+
+            $this->kategori->insert([
+                'katnama' => $namakategori
+            ]);
+
+            $msg = [
+                'sukses' => 'Kategori berhasil ditambahkan!'
+            ];
+
+            echo json_encode($msg);
+        }
+    }
+
+    public function hapus()
+    {
+        if ($this->request->isAJAX()) {
+            $idKategori = $this->request->getVar('idkategori');
+
+            $this->kategori->delete($idKategori);
+
+            $msg = [
+                'sukses' => 'Kategori berhasil dihapus!'
+            ];
+
+            echo json_encode($msg);
+        };
     }
 }

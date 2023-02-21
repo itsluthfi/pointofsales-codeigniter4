@@ -32,6 +32,9 @@ $routes->set404Override();
 $routes->get('/', 'Layout::index');
 $routes->get('/kategori', 'Kategori::index');
 $routes->post('/kategori', 'Kategori::index');
+$routes->get('/kategori/formTambah', 'Kategori::formTambah');
+$routes->post('/kategori/simpandata', 'Kategori::simpanData');
+$routes->post('/kategori/hapus', 'Kategori::hapus');
 
 /*
  * --------------------------------------------------------------------

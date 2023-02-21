@@ -16,13 +16,6 @@ class KategoriModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = ['katid', 'katnama'];
 
-    // Dates
-    protected $useTimestamps = true;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
-
     public function cariData($cari)
     {
         return $this->table('kategori')->like('katnama', $cari);
