@@ -21,6 +21,18 @@
         </div>
     </div>
     <div class="card-body">
+
+        <form method="POST" action="/kategori">
+            <?= csrf_field() ?>
+
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Cari nama kategori" name="carikategori" autofocus>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary" name="tombolkategori">Cari</button>
+                </div>
+            </div>
+        </form>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -30,23 +42,22 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>4</td>
-                    <td>7</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>5</td>
-                    <td>8</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>6</td>
-                    <td>9</td>
-                </tr>
+                <?php $nomor = 1 + (($nohalaman - 1) * 2);
+                foreach ($datakategori as $row) : ?>
+                    <tr>
+                        <td><?= $nomor++ ?></td>
+                        <td><?= $row['katnama'] ?></td>
+                        <td>
+                            <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
+        <div class="float">
+            <?= $pager->links('kategori', 'custom_paging') ?>
+        </div>
     </div>
     <!-- /.card-body -->
 </div>

@@ -31,6 +31,7 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Layout::index');
 $routes->get('/kategori', 'Kategori::index');
+$routes->post('/kategori', 'Kategori::index');
 
 /*
  * --------------------------------------------------------------------
