@@ -18,4 +18,12 @@
         </p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="<?= site_url('/satuan') ?>" class="nav-link">
+        <i class="nav-icon fa fa-list"></i>
+        <p>
+            Satuan
+        </p>
+    </a>
+</li>
 <?= $this->endSection() ?>
