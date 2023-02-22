@@ -35,6 +35,9 @@ $routes->post('/kategori', 'Kategori::index');
 $routes->get('/kategori/formTambah', 'Kategori::formTambah');
 $routes->post('/kategori/simpandata', 'Kategori::simpanData');
 $routes->post('/kategori/hapus', 'Kategori::hapus');
+$routes->post('/kategori/formEdit', 'Kategori::formEdit');
+$routes->post('/kategori/updatedata', 'Kategori::updatedata');
+
 
 /*
  * --------------------------------------------------------------------

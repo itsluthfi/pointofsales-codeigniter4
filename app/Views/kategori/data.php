@@ -48,7 +48,7 @@
                         <td><?= $nomor++ ?></td>
                         <td><?= $row['katnama'] ?></td>
                         <td>
-                            <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-info" onclick="edit('<?= $row['katid'] ?>')"><i class="fas fa-edit"></i></button>
                             <button type="button" class="btn btn-sm btn-danger" onclick="hapus('<?= $row['katid'] ?>', '<?= $row['katnama'] ?>')"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     </tr>
@@ -100,6 +100,29 @@
                 })
             }
         })
+    }
+
+    function edit(id) {
+        $.ajax({
+            type: "post",
+            url: "<?= site_url('kategori/formEdit') ?>",
+            data: {
+                idkategori: id
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.data) {
+                    $('.viewmodal').html(response.data).show();
+                    $('#modalformedit').on('shown.bs.modal', function(event) {
+                        $('#namakategori').focus();
+                    });
+                    $('#modalformedit').modal('show');
+                }
+            },
+            error: function(xhr, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+            }
+        });
     }
 
     $(document).ready(function() {
