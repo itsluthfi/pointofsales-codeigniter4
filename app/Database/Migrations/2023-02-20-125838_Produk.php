@@ -39,7 +39,12 @@ class Produk extends Migration
                 'type' => 'double',
                 'constraint' => '11,2',
                 'default' => 0.00
-            ]
+            ],
+            'gambar'       => [
+                'type'       => 'VARCHAR',
+                'constraint' => '100',
+                'default' => null
+            ],
         ]);
         $this->forge->addKey('kodebarcode', true);
         $this->forge->addForeignKey('produk_satid', 'satuan', 'satid', 'cascade');
