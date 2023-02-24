@@ -19,4 +19,10 @@ class ProdukModel extends Model
         'harga_jual',
         'gambar'
     ];
+
+    public function cariData($cari)
+    {
+        return $this->table('produk')->join('kategori', 'katid=produk_katid')->join('satuan', 'satid=produk_satid')
+            ->orlike('kodebarcode', $cari)->orlike('namaproduk', $cari);
+    }
 }

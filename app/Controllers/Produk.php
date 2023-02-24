@@ -13,13 +13,28 @@ class Produk extends BaseController
     }
     public function index()
     {
+        $tombolCari = $this->request->getPost('tombolcariproduk');
+
+        if (isset($tombolCari)) {
+            $cari = $this->request->getPost('cariproduk');
+            session()->set('cariproduk', $cari);
+            redirect()->to('produk');
+        } else {
+            $cari = session()->get('cariproduk');
+        }
+
+        $dataProduk = $cari ? $this->produk->cariData($cari) : $this->produk->join('kategori', 'katid=produk_katid')
+            ->join('satuan', 'satid=produk_satid');
+
+        $noHalaman = $this->request->getVar('page_produk') ? $this->request->getVar('page_produk') : 1;
 
         $data = [
-            'dataproduk' => $this->produk->join('kategori', 'produk_katid=katid')
-                ->join('satuan', 'produk_satid=satid')
-                ->paginate(10, 'produk'),
+            'dataproduk' => $dataProduk->paginate(10, 'produk'),
             'pager' => $this->produk->pager,
+            'nohalaman' => $noHalaman,
+            'cari' => $cari
         ];
+
         return view('produk/data', $data);
     }
 

@@ -52,6 +52,7 @@ $routes->post('/satuan/updatedata', 'Satuan::updatedata');
 
 // route produk
 $routes->get('/produk', 'Produk::index');
+$routes->post('/produk', 'Produk::index');
 $routes->get('/produk/ambilDataKategori', 'Produk::ambilDataKategori');
 $routes->post('/produk/ambilDataKategori', 'Produk::ambilDataKategori');
 $routes->get('/produk/ambilDataSatuan', 'Produk::ambilDataSatuan');
