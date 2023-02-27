@@ -166,11 +166,6 @@
             aDec: '.',
             mDec: '2'
         });
-        $('#stok').autoNumeric('init', {
-            aSep: ',',
-            aDec: '.',
-            mDec: '0'
-        });
 
         $('.tombolTambahKategori').click(function(e) {
             e.preventDefault();

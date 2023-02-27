@@ -135,11 +135,6 @@
             aDec: '.',
             mDec: '2'
         });
-        $('#stok').autoNumeric('init', {
-            aSep: ',',
-            aDec: '.',
-            mDec: '0'
-        });
 
         $('.tombolSimpan').click(function(e) {
             e.preventDefault();
