@@ -59,6 +59,9 @@ $routes->get('/produk/ambilDataSatuan', 'Produk::ambilDataSatuan');
 $routes->post('/produk/ambilDataSatuan', 'Produk::ambilDataSatuan');
 $routes->get('/produk/formTambah', 'Produk::formTambah');
 $routes->post('/produk/simpandata', 'Produk::simpandata');
+$routes->get('/produk/formEdit/(:any)', 'Produk::formEdit/$1');
+$routes->post('/produk/updatedata', 'Produk::updatedata');
+$routes->post('/produk/hapus', 'Produk::hapus');
 
 /*
  * --------------------------------------------------------------------

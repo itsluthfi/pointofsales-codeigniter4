@@ -1,7 +1,7 @@
 <?= $this->extend('layout/menu') ?>
 
 <?= $this->section('judul') ?>
-<h3><i class="fa fa-fw fa-table"></i> Form Tambah Produk</h3>
+<h3><i class="fa fa-fw fa-table"></i> Form Edit Produk</h3>
 <?= $this->endSection() ?>
 
 
@@ -25,20 +25,18 @@
         </div>
     </div>
     <div class="card-body">
-        <?= form_open_multipart('', ['class' => 'formsimpan']) ?>
+        <?= form_open_multipart('produk/updatedata', ['class' => 'formsimpan']) ?>
         <?= csrf_field() ?>
         <div class="form-group row">
             <label for="kodebarcode" class="col-sm-4 col-form-label">Kode Barcode</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" id="kodebarcode" name="kodebarcode" autofocus>
-                <div class="invalid-feedback errorKodeBarcode" style="display: none;">
-                </div>
+                <input type="text" class="form-control" id="kodebarcode" name="kodebarcode" value="<?= $kode ?>" readonly>
             </div>
         </div>
         <div class="form-group row">
             <label for="namaproduk" class="col-sm-4 col-form-label">Nama Produk</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" id="namaproduk" name="namaproduk">
+                <input type="text" class="form-control" id="namaproduk" name="namaproduk" value="<?= $nama ?>" autofocus>
                 <div class="invalid-feedback errorNamaProduk" style="display: none;">
                 </div>
             </div>
@@ -46,7 +44,7 @@
         <div class="form-group row">
             <label for="stok" class="col-sm-4 col-form-label">Stok Tersedia</label>
             <div class="col-sm-4">
-                <input type="text" class="form-control" id="stok" name="stok" value="0">
+                <input type="text" class="form-control" id="stok" name="stok" value="<?= $stok ?>">
                 <div class="invalid-feedback errorStok" style="display: none;">
                 </div>
             </div>
@@ -55,49 +53,53 @@
             <label for="kategori" class="col-sm-4 col-form-label">Kategori</label>
             <div class="col-sm-4">
                 <select class="form-control" name="kategori" id="kategori">
-
+                    <?php
+                    foreach ($datakategori as $k) :
+                        if ($k['katid'] == $produkkategori) :
+                            echo "<option value=\"$k[katid]\" selected>$k[katnama]</option>";
+                        else :
+                            echo "<option value=\"$k[katid]\">$k[katnama]</option>";
+                        endif;
+                    endforeach; ?>
                 </select>
-                <div class="invalid-feedback errorKategori" style="display: none;">
-                </div>
-            </div>
-            <div class="col-sm-2">
-                <button type="button" class="btn btn-sm btn-primary tombolTambahKategori">
-                    <i class="fa fa-plus-circle"></i>
-                </button>
             </div>
         </div>
         <div class="form-group row">
             <label for="satuan" class="col-sm-4 col-form-label">Satuan</label>
             <div class="col-sm-4">
                 <select class="form-control" name="satuan" id="satuan">
-
+                    <?php
+                    foreach ($datasatuan as $s) :
+                        if ($s['satid'] == $produksatuan) :
+                            echo "<option value=\"$s[satid]\" selected>$s[satnama]</option>";
+                        else :
+                            echo "<option value=\"$s[satid]\">$s[satnama]</option>";
+                        endif;
+                    endforeach; ?>
                 </select>
-                <div class="invalid-feedback errorSatuan" style="display: none;">
-                </div>
-            </div>
-            <div class="col-sm-2">
-                <button type="button" class="btn btn-sm btn-primary tombolTambahSatuan">
-                    <i class="fa fa-plus-circle"></i>
-                </button>
             </div>
         </div>
         <div class="form-group row">
             <label for="hargabeli" class="col-sm-4 col-form-label">Harga Beli (Rp)</label>
             <div class="col-sm-4">
-                <input style="text-align: right;" type="text" class="form-control" name="hargabeli" id="hargabeli">
+                <input style="text-align: right;" type="text" class="form-control" name="hargabeli" id="hargabeli" value="<?= $hargabeli ?>">
                 <div class="invalid-feedback errorHargaBeli" style="display: none;">
                 </div>
             </div>
-
         </div>
         <div class="form-group row">
             <label for="hargajual" class="col-sm-4 col-form-label">Harga Jual (Rp)</label>
             <div class="col-sm-4">
-                <input style="text-align: right;" type="text" class="form-control" name="hargajual" id="hargajual">
+                <input style="text-align: right;" type="text" class="form-control" name="hargajual" id="hargajual" value="<?= $hargajual ?>">
                 <div class="invalid-feedback errorHargaJual" style="display: none;">
                 </div>
             </div>
-
+        </div>
+        <div class="form-group row">
+            <label for="uploadgambar" class="col-sm-4 col-form-label">Gambar Produk</label>
+            <div class="col-sm-4">
+                <img src="<?= base_url($gambarproduk) ?>" alt="" style="width: 100%" class="img-thumbnail">
+            </div>
         </div>
         <div class="form-group row">
             <label for="uploadgambar" class="col-sm-4 col-form-label">Upload Gambar (Jika Ada)</label>
@@ -122,40 +124,7 @@
 <div class="viewmodal" style="display:none;"></div>
 
 <script>
-    function tampilKategori() {
-        $.ajax({
-            url: "<?= site_url('produk/ambilDataKategori') ?>",
-            dataType: "json",
-            success: function(response) {
-                if (response.data) {
-                    $('#kategori').html(response.data);
-                }
-            },
-            error: function(xhr, thrownError) {
-                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-            }
-        });
-    }
-
-    function tampilSatuan() {
-        $.ajax({
-            url: "<?= site_url('produk/ambilDataSatuan') ?>",
-            dataType: "json",
-            success: function(response) {
-                if (response.data) {
-                    $('#satuan').html(response.data);
-                }
-            },
-            error: function(xhr, thrownError) {
-                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-            }
-        });
-    }
-
     $(document).ready(function() {
-        tampilKategori();
-        tampilSatuan();
-
         $('#hargabeli').autoNumeric('init', {
             aSep: ',',
             aDec: '.',
@@ -172,55 +141,6 @@
             mDec: '0'
         });
 
-        $('.tombolTambahKategori').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: "<?= site_url('kategori/formTambah') ?>",
-                dataType: "json",
-                type: 'post',
-                data: {
-                    aksi: 1
-                },
-                success: function(response) {
-                    if (response.data) {
-                        $('.viewmodal').html(response.data).show();
-                        $('#modaltambahkategori').on('shown.bs.modal', function(event) {
-                            $('#namakategori').focus();
-                        });
-                        $('#modaltambahkategori').modal('show');
-                    }
-                },
-                error: function(xhr, thrownError) {
-                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-                }
-            });
-        });
-
-
-        $('.tombolTambahSatuan').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: "<?= site_url('satuan/formTambah') ?>",
-                dataType: "json",
-                type: 'post',
-                data: {
-                    aksi: 1
-                },
-                success: function(response) {
-                    if (response.data) {
-                        $('.viewmodal').html(response.data).show();
-                        $('#modaltambahsatuan').on('shown.bs.modal', function(event) {
-                            $('#namasatuan').focus();
-                        });
-                        $('#modaltambahsatuan').modal('show');
-                    }
-                },
-                error: function(xhr, thrownError) {
-                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-                }
-            });
-        });
-
         $('.tombolSimpan').click(function(e) {
             e.preventDefault();
             let form = $('.formsimpan')[0];
@@ -228,7 +148,7 @@
 
             $.ajax({
                 type: "post",
-                url: "<?= site_url('produk/simpandata') ?>",
+                url: "<?= site_url('produk/updatedata') ?>",
                 data: data,
                 dataType: "json",
                 enctype: 'multipart/form-data',
@@ -240,21 +160,12 @@
                     $('.tombolSimpan').prop('disabled', true);
                 },
                 complete: function() {
-                    $('.tombolSimpan').html('Simpan');
+                    $('.tombolSimpan').html('Perbarui');
                     $('.tombolSimpan').prop('disabled', false);
                 },
                 success: function(response) {
                     if (response.error) {
                         let msg = response.error;
-                        if (msg.errorKodeBarcode) {
-                            $('.errorKodeBarcode').html(msg.errorKodeBarcode).show();
-                            $('#kodebarcode').addClass('is-invalid');
-                        } else {
-                            $('.errorKodeBarcode').fadeOut();
-                            $('#kodebarcode').removeClass('is-invalid');
-                            $('#kodebarcode').addClass('is-valid');
-                        }
-
                         if (msg.errorNamaProduk) {
                             $('.errorNamaProduk').html(msg.errorNamaProduk).show();
                             $('#namaproduk').addClass('is-invalid');

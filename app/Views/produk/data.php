@@ -64,8 +64,8 @@
                             <td><?= $r['harga_beli'] ?></td>
                             <td><?= $r['stok_tersedia'] ?></td>
                             <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                <button type="button" class="btn btn-sm btn-info" onclick="window.location='<?= site_url('produk/formEdit/' . $r['kodebarcode']) ?>'"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-sm btn-danger" onclick="hapus('<?= $r['kodebarcode'] ?>', '<?= $r['namaproduk'] ?>')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -77,4 +77,44 @@
         </div>
     </div>
 </div>
+
+<script>
+    function hapus(id, nama) {
+        Swal.fire({
+            title: 'Hapus Produk',
+            html: `Apakah anda ingin menghapus produk <strong>${nama}</strong>?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, saya ingin menghapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "post",
+                    url: "<?= site_url('produk/hapus') ?>",
+                    data: {
+                        idproduk: id,
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.sukses) {
+                            Swal.fire(
+                                'Terhapus!',
+                                response.sukses,
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            });
+                        };
+                    }
+                })
+            }
+        })
+    }
+</script>
+
 <?= $this->endSection() ?>
