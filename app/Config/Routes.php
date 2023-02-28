@@ -63,6 +63,10 @@ $routes->get('/produk/formEdit/(:any)', 'Produk::formEdit/$1');
 $routes->post('/produk/updatedata', 'Produk::updatedata');
 $routes->post('/produk/hapus', 'Produk::hapus');
 
+// route penjualan
+$routes->get('/penjualan', 'Penjualan::index');
+$routes->get('/penjualan/input', 'Penjualan::input');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

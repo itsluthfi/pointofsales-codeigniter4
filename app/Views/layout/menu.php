@@ -34,4 +34,13 @@
         </p>
     </a>
 </li>
+<li class="nav-header">Transaksi</li>
+<li class="nav-item">
+    <a href="<?= site_url('/penjualan') ?>" class="nav-link">
+        <i class="nav-icon fa fa-table"></i>
+        <p>
+            Penjualan
+        </p>
+    </a>
+</li>
 <?= $this->endSection() ?>
