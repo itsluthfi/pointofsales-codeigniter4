@@ -66,6 +66,7 @@ $routes->post('/produk/hapus', 'Produk::hapus');
 // route penjualan
 $routes->get('/penjualan', 'Penjualan::index');
 $routes->get('/penjualan/input', 'Penjualan::input');
+$routes->post('/penjualan/buatFaktur', 'Penjualan::buatFaktur');
 
 /*
  * --------------------------------------------------------------------

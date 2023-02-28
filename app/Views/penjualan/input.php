@@ -87,7 +87,28 @@
 <script>
     $(document).ready(function() {
         $('body').addClass('sidebar-collapse');
+
+        buatFaktur();
     });
+
+    function buatFaktur() {
+        $.ajax({
+            type: "post",
+            url: "<?= site_url('penjualan/buatFaktur') ?>",
+            data: {
+                tanggal: $('#tanggal').val()
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.fakturpenjualan) {
+                    $('#nofaktur').val(response.fakturpenjualan);
+                }
+            },
+            error: function(xhr, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+            }
+        });
+    }
 </script>
 
 <?= $this->endSection() ?>
