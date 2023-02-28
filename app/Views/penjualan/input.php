@@ -89,6 +89,7 @@
         $('body').addClass('sidebar-collapse');
 
         buatFaktur();
+        dataDetailPenjualan();
     });
 
     function buatFaktur() {
@@ -102,6 +103,28 @@
             success: function(response) {
                 if (response.fakturpenjualan) {
                     $('#nofaktur').val(response.fakturpenjualan);
+                }
+            },
+            error: function(xhr, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+            }
+        });
+    }
+
+    function dataDetailPenjualan() {
+        $.ajax({
+            type: "post",
+            url: "<?= site_url('penjualan/dataDetail') ?>",
+            data: {
+                nofaktur: $('#nofaktur').val()
+            },
+            dataType: "json",
+            beforeSend: function() {
+                $('.dataDetailPenjualan').html('<i class="fa fa-spin fa-spinner"></i>')
+            },
+            success: function(response) {
+                if (response.data) {
+                    $('.dataDetailPenjualan').html(response.data);
                 }
             },
             error: function(xhr, thrownError) {
