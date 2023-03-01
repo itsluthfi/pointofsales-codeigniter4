@@ -57,19 +57,25 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="kodebarcode">Kode Produk</label>
                     <input type="text" class="form-control" name="kodebarcode" id="kodebarcode" autofocus>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="">Nama Produk</label>
+                    <input type="text" style="font-weight: bold; font-size: 16pt;" class="form-control" name="namaproduk" id="namaproduk" readonly>
+                </div>
+            </div>
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="jml">Jumlah</label>
                     <input type="number" class="form-control" name="jumlah" id="jumlah" value="1">
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="jml">Total Bayar</label>
                     <input type="text" class="form-control form-control-lg" name="totalbayar" id="totalbayar" style="text-align: right; color:blue; font-weight : bold; font-size:30pt;" value="0" readonly>
