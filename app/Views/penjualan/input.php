@@ -19,7 +19,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="nofaktur">Faktur</label>
-                    <input type="text" class="form-control" style="color:red;font-weight:bold;" name="nofaktur" id="nofaktur" readonly>
+                    <input type="text" class="form-control" style="color:red;font-weight:bold;" name="nofaktur" id="nofaktur" readonly value="<?= $nofaktur ?>">
                 </div>
             </div>
             <div class="col-md-3">
@@ -88,28 +88,8 @@
     $(document).ready(function() {
         $('body').addClass('sidebar-collapse');
 
-        buatFaktur();
         dataDetailPenjualan();
     });
-
-    function buatFaktur() {
-        $.ajax({
-            type: "post",
-            url: "<?= site_url('penjualan/buatFaktur') ?>",
-            data: {
-                tanggal: $('#tanggal').val()
-            },
-            dataType: "json",
-            success: function(response) {
-                if (response.fakturpenjualan) {
-                    $('#nofaktur').val(response.fakturpenjualan);
-                }
-            },
-            error: function(xhr, thrownError) {
-                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-            }
-        });
-    }
 
     function dataDetailPenjualan() {
         $.ajax({

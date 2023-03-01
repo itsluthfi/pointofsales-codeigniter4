@@ -18,7 +18,11 @@ class Penjualan extends BaseController
 
     public function input()
     {
-        return view('penjualan/input');
+        $data = [
+            'nofaktur' => $this->buatFaktur()
+        ];
+
+        return view('penjualan/input', $data);
     }
 
     public function buatFaktur()
@@ -37,8 +41,7 @@ class Penjualan extends BaseController
         // membuat format nomor transaksi berikutnya
         $fakturPenjualan = 'J' . date('dmy', strtotime($tgl)) . sprintf('%04s', $nextNoUrut);
 
-        $msg = ['fakturpenjualan' => $fakturPenjualan];
-        echo json_encode($msg);
+        return $fakturPenjualan;
     }
 
     public function dataDetail()
