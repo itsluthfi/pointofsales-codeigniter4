@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\ProdukdataModel;
+use Config\Services;
 
 class Penjualan extends BaseController
 {
@@ -60,5 +62,54 @@ class Penjualan extends BaseController
             'data' => view('penjualan/viewdetail', $data)
         ];
         echo json_encode($msg);
+    }
+
+    public function viewDataProduk()
+    {
+        if ($this->request->isAJAX()) {
+            $msg = [
+                'viewmodal' => view('penjualan/viewmodalcariproduk')
+            ];
+            echo json_encode($msg);
+        }
+    }
+
+    public function listDataProduk()
+    {
+        if ($this->request->isAJAX()) {
+
+            $request = Services::request();
+            $keywordkode = $this->request->getPost('keywordkode');
+            $modelProduk = new ProdukdataModel($request);
+
+            if ($request->getMethod(true) == 'POST') {
+                $lists = $modelProduk->get_datatables($keywordkode);
+                $data  = [];
+
+                $no = $request->getPost("start");
+            }
+            foreach ($lists as $list) {
+                $no++;
+                $row = [];
+                $row[] = $no;
+                $row[] = $list->kodebarcode;
+                $row[] = $list->namaproduk;
+                $row[] = $list->katnama;
+                $row[] = number_format($list->stok_tersedia, 0, ',', '.');
+                $row[] = number_format($list->harga_jual, 0, ',', '.');
+                $row[] = "<button type=\"button\" class=\"btn btn-primary\" onclick=\"pilihitem('" . $list->kodebarcode . "', '" . $list->namaproduk . "')\">Pilih</button>";
+                $data[] = $row;
+            }
+
+
+            $output = [
+                "draw" => $request->getPost('draw'),
+                "recordsTotal" => $modelProduk->count_all($keywordkode),
+                "recordsFiltered" => $modelProduk->count_filtered($keywordkode),
+                "data" => $data
+            ];
+
+            echo json_encode($output);
+        }
     }
 }

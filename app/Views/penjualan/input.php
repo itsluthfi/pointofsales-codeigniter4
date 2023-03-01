@@ -90,11 +90,20 @@
     </div>
 </div>
 
+<div class="viewmodal" style="display: none;"></div>
+
 <script>
     $(document).ready(function() {
         $('body').addClass('sidebar-collapse');
 
         dataDetailPenjualan();
+
+        $('#kodebarcode').keydown(function(e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                cekKode();
+            }
+        })
     });
 
     function dataDetailPenjualan() {
@@ -117,6 +126,26 @@
                 alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
             }
         });
+    }
+
+    function cekKode() {
+        let kode = $('#kodebarcode').val();
+
+        if (kode.length == 0) {
+            $.ajax({
+                url: "<?= site_url('penjualan/viewDataProduk') ?>",
+                dataType: "json",
+                success: function(response) {
+                    $('.viewmodal').html(response.viewmodal).show();
+                    $('#modalproduk').modal('show');
+                },
+                error: function(xhr, thrownError) {
+                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+                }
+            });
+        } else {
+            alert('Ada');
+        }
     }
 </script>
 

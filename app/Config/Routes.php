@@ -68,6 +68,8 @@ $routes->get('/penjualan', 'Penjualan::index');
 $routes->get('/penjualan/input', 'Penjualan::input');
 $routes->post('/penjualan/buatFaktur', 'Penjualan::buatFaktur');
 $routes->post('/penjualan/dataDetail', 'Penjualan::dataDetail');
+$routes->get('/penjualan/viewDataProduk', 'Penjualan::viewDataProduk');
+$routes->post('/penjualan/listDataProduk', 'Penjualan::listDataProduk');
 
 /*
  * --------------------------------------------------------------------
