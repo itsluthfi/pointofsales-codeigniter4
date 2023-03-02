@@ -191,4 +191,21 @@ class Penjualan extends BaseController
             echo json_encode($msg);
         }
     }
+
+    public function hapusItem()
+    {
+        if ($this->request->isAJAX()) {
+            $id = $this->request->getPost('id');
+            $tblTempPenjualan = $this->db->table('temp_penjualan');
+            $queryHapus = $tblTempPenjualan->delete(['detjual_id' => $id]);
+
+            if ($queryHapus) {
+                $msg = [
+                    'sukses' => 'berhasil'
+                ];
+
+                echo json_encode($msg);
+            }
+        }
+    }
 }
