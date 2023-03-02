@@ -173,4 +173,22 @@ class Penjualan extends BaseController
             echo json_encode($msg);
         }
     }
+
+    public function hitungTotalBayar()
+    {
+        if ($this->request->isAJAX()) {
+            $nofaktur = $this->request->getPost('nofaktur');
+
+            $tblTempPenjualan = $this->db->table('temp_penjualan');
+
+            $queryTotal = $tblTempPenjualan->select('SUM(detjual_subtotal) as totalbayar')->where('detjual_faktur', $nofaktur)->get();
+            $rowTotal = $queryTotal->getRowArray();
+
+            $msg = [
+                'totalbayar' => number_format($rowTotal['totalbayar'], 0, ',', '.'),
+            ];
+
+            echo json_encode($msg);
+        }
+    }
 }

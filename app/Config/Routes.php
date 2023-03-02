@@ -71,6 +71,7 @@ $routes->post('/penjualan/dataDetail', 'Penjualan::dataDetail');
 $routes->get('/penjualan/viewDataProduk', 'Penjualan::viewDataProduk');
 $routes->post('/penjualan/listDataProduk', 'Penjualan::listDataProduk');
 $routes->post('/penjualan/simpanTemp', 'Penjualan::simpanTemp');
+$routes->post('/penjualan/hitungTotalBayar', 'Penjualan::hitungTotalBayar');
 
 /*
  * --------------------------------------------------------------------

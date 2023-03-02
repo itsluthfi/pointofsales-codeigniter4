@@ -197,6 +197,27 @@
         $('#namaproduk').val('');
         $('#jumlah').val(1);
         $('#kodebarcode').focus();
+
+        hitungTotalBayar();
+    }
+
+    function hitungTotalBayar() {
+        $.ajax({
+            url: "<?= site_url('penjualan/hitungTotalBayar') ?>",
+            dataType: "json",
+            data: {
+                nofaktur: $('#nofaktur').val()
+            },
+            type: "post",
+            success: function(response) {
+                if (response.totalbayar) {
+                    $('#totalbayar').val(response.totalbayar);
+                }
+            },
+            error: function(xhr, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+            }
+        });
     }
 </script>
 
