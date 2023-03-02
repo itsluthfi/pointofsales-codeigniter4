@@ -19,6 +19,7 @@
                 </button>
             </div>
             <div class="modal-body">
+                <input type="hidden" name="keywordkode" id="keywordkode" value="<?= $keyword ?>">
                 <table id="dataproduk" class="table table-bordered table-striped dataTable dtr-inline" aria-describedby="example1_info" width="100%">
                     <thead>
                         <tr>
@@ -50,6 +51,9 @@
             'ajax': {
                 'url': '<?= site_url('penjualan/listDataProduk') ?>',
                 'type': 'POST',
+                'data': {
+                    keywordkode: $('#keywordkode').val()
+                }
             },
             'columnDefs': [{
                 'targets': [0],

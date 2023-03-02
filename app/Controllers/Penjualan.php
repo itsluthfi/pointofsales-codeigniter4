@@ -66,9 +66,13 @@ class Penjualan extends BaseController
 
     public function viewDataProduk()
     {
+        $keyword = $this->request->getPost('keyword');
+        $data = [
+            'keyword' => $keyword
+        ];
         if ($this->request->isAJAX()) {
             $msg = [
-                'viewmodal' => view('penjualan/viewmodalcariproduk')
+                'viewmodal' => view('penjualan/viewmodalcariproduk', $data)
             ];
             echo json_encode($msg);
         }
@@ -110,6 +114,63 @@ class Penjualan extends BaseController
             ];
 
             echo json_encode($output);
+        }
+    }
+
+    public function simpanTemp()
+    {
+        if ($this->request->isAJAX()) {
+            $kodebarcode = $this->request->getPost('kodebarcode');
+            $namaproduk = $this->request->getPost('namaproduk');
+            $jumlah = $this->request->getPost('jumlah');
+            $nofaktur = $this->request->getPost('nofaktur');
+
+            if (strlen($namaproduk) > 0) {
+                $queryCekProduk = $this->db->table('produk')->where('kodebarcode', $kodebarcode)->where('namaproduk', $namaproduk)->get();
+            } else {
+                $queryCekProduk = $this->db->table('produk')->like('kodebarcode', $kodebarcode)->orLike('namaproduk', $kodebarcode)->get();
+            }
+
+            $queryCekProduk = $this->db->table('produk')->like('kodebarcode', $kodebarcode)->orLike('namaproduk', $kodebarcode)->get();
+
+            $totalData = $queryCekProduk->getNumRows();
+
+            if ($totalData > 1) {
+                $msg = [
+                    'totaldata' => 'banyak',
+                ];
+            } elseif ($totalData == 1) {
+                $tblTempPenjualan = $this->db->table('temp_penjualan');
+                $rowProduk = $queryCekProduk->getRowArray();
+
+                $stopProduk = $rowProduk['stok_tersedia'];
+
+                if ($stopProduk <= 0) {
+                    $msg = [
+                        'error' => "Maaf stok sudah habis"
+                    ];
+                } else if ($jumlah > intval($stopProduk)) {
+                    $msg = [
+                        'error' => "Maaf stok tidak mencukupi"
+                    ];
+                } else {
+                    $insertData = [
+                        'detjual_faktur' => $nofaktur,
+                        'detjual_kodebarcode' => $rowProduk['kodebarcode'],
+                        'detjual_hargajual' => $rowProduk['harga_jual'],
+                        'detjual_jml' => $jumlah,
+                        'detjual_subtotal' => $rowProduk['harga_jual'] * $jumlah,
+                    ];
+                    $tblTempPenjualan->insert($insertData);
+
+                    $msg = ['sukses' => 'berhasil'];
+                }
+            } else {
+                $msg = [
+                    'error' => 'Maaf barang tidak ditemukan'
+                ];
+            }
+            echo json_encode($msg);
         }
     }
 }

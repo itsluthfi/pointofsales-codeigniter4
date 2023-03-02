@@ -144,8 +144,59 @@
                 }
             });
         } else {
-            alert('Ada');
+            $.ajax({
+                type: 'post',
+                url: "<?= site_url('penjualan/simpanTemp') ?>",
+                dataType: "json",
+                data: {
+                    kodebarcode: kode,
+                    namaproduk: $('#namaproduk').val(),
+                    jumlah: $('#jumlah').val(),
+                    nofaktur: $('#nofaktur').val(),
+                },
+                success: function(response) {
+                    if (response.totalData == 'banyak') {
+                        $.ajax({
+                            url: "<?= site_url('penjualan/viewDataProduk') ?>",
+                            dataType: "json",
+                            data: {
+                                keyword: kode
+                            },
+                            type: "post",
+                            success: function(response) {
+                                $('.viewmodal').html(response.viewmodal).show();
+                                $('#modalproduk').modal('show');
+                            },
+                            error: function(xhr, thrownError) {
+                                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+                            }
+                        });
+                    }
+                    if (response.sukses == 'berhasil') {
+                        dataDetailPenjualan();
+                        kosong();
+                    }
+                    if (response.error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error...',
+                            html: response.error,
+
+                        })
+                    }
+                },
+                error: function(xhr, thrownError) {
+                    alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+                }
+            });
         }
+    }
+
+    function kosong() {
+        $('#kodebarcode').val('');
+        $('#namaproduk').val('');
+        $('#jumlah').val(1);
+        $('#kodebarcode').focus();
     }
 </script>
 
