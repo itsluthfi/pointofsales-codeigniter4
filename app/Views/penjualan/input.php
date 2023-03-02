@@ -97,6 +97,7 @@
         $('body').addClass('sidebar-collapse');
 
         dataDetailPenjualan();
+        hitungTotalBayar();
 
         $('#kodebarcode').keydown(function(e) {
             if (e.keyCode == 13) {
@@ -181,7 +182,6 @@
                             icon: 'error',
                             title: 'Error...',
                             html: response.error,
-
                         })
                     }
                 },
