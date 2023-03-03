@@ -10,6 +10,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <?= form_open('penjualan/simpanPembayaran', ['class' => 'frmpembayaran']) ?>
             <div class="modal-body">
                 <input type="hidden" name="nofaktur" value="<?= $nofaktur ?>">
                 <input type="hidden" name="kopel" value="<?= $kopel ?>">
@@ -43,8 +44,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success tombolSimpan">Simpan</button>
+                <button type="submit" class="btn btn-success tombolSimpan">Simpan</button>
             </div>
+            <?= form_close() ?>
         </div>
     </div>
 </div>
@@ -97,6 +99,69 @@
         });
         $('#jmluang').keyup(function(e) {
             hitungSisaUang();
+        });
+
+        $('.frmpembayaran').submit(function(e) {
+            e.preventDefault();
+
+            let jmluang = ($('#jmluang').val() != '') ? $('#jmluang').autoNumeric('get') : 0;
+            let sisauang = ($('#sisauang').val() != '') ? $('#sisauang').autoNumeric('get') : 0;
+
+            if (parseFloat(jmluang) == 0 || parseFloat(jmluang) == '') {
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Maaf jumlah uang tidak cukup'
+                })
+                $('#jmluang').focus();
+
+            } else if (parseFloat(sisauang) < 0) {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Maaf jumlah uang tidak cukup'
+                })
+                $('#jmluang').focus();
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    dataType: "JSON",
+                    beforeSend: function() {
+                        $('.tombolSimpan').prop('disabled', true);
+                        $('.tombolSimpan').html('<i class="fa fa-spinner fa-spin"></i>');
+                    },
+                    complete: function() {
+                        $('.tombolSimpan').prop('disabled', false);
+                        $('.tombolSimpan').html('Simpan');
+                    },
+                    success: function(response) {
+                        if (response.sukses == 'berhasil') {
+                            Swal.fire({
+                                title: 'Cetak Struk Pembayaran',
+                                text: 'Apakah Anda ingin mencetak struk pembayaran?',
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Ya',
+                                cancelButtonText: 'Tidak'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    alert('Cetak struk pembayaran');
+                                    window.location.reload();
+                                } else {
+                                    window.location.reload();
+                                }
+                            })
+                        }
+                    },
+                    error: function(xhr, thrownError) {
+                        alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+                    },
+                });
+            }
+
+            return false;
         });
     });
 

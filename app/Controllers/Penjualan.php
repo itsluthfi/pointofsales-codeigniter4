@@ -254,4 +254,59 @@ class Penjualan extends BaseController
             echo json_encode($msg);
         }
     }
+
+    public function simpanPembayaran()
+    {
+        if ($this->request->isAJAX()) {
+            $nofaktur = $this->request->getPost('nofaktur');
+            $kopel = $this->request->getPost('kopel');
+            $totalkotor = $this->request->getPost('totalkotor');
+            $totalbersih = str_replace(",", "", $this->request->getPost('totalbersih'));
+            $dispersen = str_replace(",", "", $this->request->getPost('dispersen'));
+            $disuang = str_replace(",", "", $this->request->getPost('disuang'));
+            $jmluang = str_replace(",", "", $this->request->getPost('jmluang'));
+            $sisauang = str_replace(",", "", $this->request->getPost('sisauang'));
+
+            $tblPenjualan = $this->db->table('penjualan');
+            $tblTempPenjualan = $this->db->table('temp_penjualan');
+            $tblDetailPenjualan = $this->db->table('penjualan_detail');
+
+            $dataInsertPenjualan = [
+                'jual_faktur' => $nofaktur,
+                'jual_tgl' => date('Y-m-d H:i:s'),
+                'jual_pelkode' => $kopel,
+                'jual_dispersen' => $dispersen,
+                'jual_disuang' => $disuang,
+                'jual_totalkotor' => $totalkotor,
+                'jual_totalbersih' => $totalbersih,
+                'jual_jmluang' => $jmluang,
+                'jual_sisauang' => $sisauang,
+
+            ];
+
+            $tblPenjualan->insert($dataInsertPenjualan);
+
+            //insert ke tabel detail penjualan
+            $ambilDataTemp = $tblTempPenjualan->getWhere(['detjual_faktur' => $nofaktur]);
+
+            $fieldDetailPenjualan = [];
+
+            foreach ($ambilDataTemp->getResultArray() as $row) {
+                $fieldDetailPenjualan[] = [
+                    'detjual_faktur' =>  $row['detjual_faktur'],
+                    'detjual_kodebarcode' => $row['detjual_kodebarcode'],
+                    'detjual_hargabeli' => $row['detjual_hargabeli'],
+                    'detjual_hargajual' => $row['detjual_hargajual'],
+                    'detjual_jml' => $row['detjual_jml'],
+                    'detjual_subtotal' => $row['detjual_subtotal'],
+                ];
+            }
+            $tblDetailPenjualan->insertBatch($fieldDetailPenjualan);
+
+            $tblTempPenjualan->emptyTable();
+
+            $msg = ['sukses' => 'berhasil'];
+            echo json_encode($msg);
+        }
+    }
 }
