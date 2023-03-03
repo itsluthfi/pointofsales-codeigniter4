@@ -208,4 +208,50 @@ class Penjualan extends BaseController
             }
         }
     }
+
+    public function batalTransaksi()
+    {
+        if ($this->request->isAJAX()) {
+            $nofaktur = $this->request->getPost('nofaktur');
+            $tblTempPenjualan = $this->db->table('temp_penjualan');
+            $hapusData = $tblTempPenjualan->emptyTable();
+
+            if ($hapusData) {
+                $msg = [
+                    'sukses' => 'berhasil'
+                ];
+
+                echo json_encode($msg);
+            }
+        }
+    }
+
+    public function pembayaran()
+    {
+        if ($this->request->isAJAX()) {
+            $nofaktur = $this->request->getPost('nofaktur');
+            $tglfaktur = $this->request->getPost('tglfaktur');
+            $kopel = $this->request->getPost('kopel');
+
+            $tblTempPenjualan = $this->db->table('temp_penjualan');
+            $cekDataTempPenjualan = $tblTempPenjualan->getWhere(['detjual_faktur' => $nofaktur]);
+
+            $queryTotal = $tblTempPenjualan->select('SUM(detjual_subtotal) as totalbayar')->where('detjual_faktur', $nofaktur)->get();
+            $rowTotal = $queryTotal->getRowArray();
+
+            if ($cekDataTempPenjualan->getNumRows() > 0) {
+                $data = [
+                    'nofaktur' => $nofaktur,
+                    'kopel' => $kopel,
+                    'totalbayar' => $rowTotal['totalbayar'],
+                ];
+                $msg = [
+                    'data' => view('penjualan/modalpembayaran', $data),
+                ];
+            } else {
+                $msg = ['error' => 'Maaf Item belum ada'];
+            }
+            echo json_encode($msg);
+        }
+    }
 }

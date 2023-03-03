@@ -91,6 +91,7 @@
 </div>
 
 <div class="viewmodal" style="display: none;"></div>
+<div class="viewmodalpembayaran" style="display: none;"></div>
 
 <script>
     $(document).ready(function() {
@@ -105,7 +106,75 @@
                 cekKode();
             }
         })
+
+        $('#btnHapusTransaksi').click(function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Batal Transaksi',
+                text: "Apakah Anda yakin untuk membatalkan transaksi?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, batalkan!',
+                cancelButtonText: 'Tidak',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "post",
+                        url: "<?= site_url('penjualan/batalTransaksi') ?>",
+                        data: {
+                            nofaktur: $('#nofaktur').val()
+                        },
+                        dataType: "JSON",
+                        success: function(response) {
+                            if (response.sukses == 'berhasil') {
+                                window.location.reload()
+                            }
+                        },
+                        error: function(xhr, thrownError) {
+                            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+                        },
+                    });
+                }
+            })
+        });
+
+        $('#btnSimpanTransaksi').click(function(e) {
+            e.preventDefault();
+            pembayaran();
+        });
     });
+
+    function pembayaran() {
+        let nofaktur = $('#nofaktur').val();
+        $.ajax({
+            type: "post",
+            url: "<?= site_url('penjualan/pembayaran') ?>",
+            data: {
+                nofaktur: nofaktur,
+                tglfaktur: $('#tanggal').val(),
+                kopel: $('#kopel').val(),
+            },
+            dataType: "JSON",
+            success: function(response) {
+                if (response.error) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Maaf',
+                        html: response.error,
+                    })
+                }
+                if (response.data) {
+                    $('.viewmodalpembayaran').html(response.data).show();
+                    $('#modalpembayaran').modal('show');
+                }
+            },
+            error: function(xhr, thrownError) {
+                alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+            },
+        });
+    }
 
     function dataDetailPenjualan() {
         $.ajax({

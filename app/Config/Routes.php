@@ -73,6 +73,8 @@ $routes->post('/penjualan/listDataProduk', 'Penjualan::listDataProduk');
 $routes->post('/penjualan/simpanTemp', 'Penjualan::simpanTemp');
 $routes->post('/penjualan/hitungTotalBayar', 'Penjualan::hitungTotalBayar');
 $routes->post('/penjualan/hapusitem', 'Penjualan::hapusItem');
+$routes->post('/penjualan/batalTransaksi', 'Penjualan::batalTransaksi');
+$routes->post('/penjualan/pembayaran', 'Penjualan::pembayaran');
 
 /*
  * --------------------------------------------------------------------
