@@ -41,7 +41,17 @@ class Penjualan extends Migration
                 'type' => 'double',
                 'constraint' => '11,2',
                 'default' => 0.00
-            ]
+            ],
+            'jual_sisauang' => [
+                'type' => 'double',
+                'constraint' => '11,2',
+                'default' => 0.00
+            ],
+            'jual_jmluang' => [
+                'type' => 'double',
+                'constraint' => '11,2',
+                'default' => 0.00
+            ],
         ]);
 
         $this->forge->addPrimaryKey('jual_faktur');
