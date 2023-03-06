@@ -1,7 +1,7 @@
 <script src="<?= base_url('assets/plugins/autoNumeric.js') ?>"></script>
 
 <!-- Modal -->
-<div class="modal fade" id="modalpembayaran" tabindex="-1" role="dialog" aria-labelledby="modalpembayaranLabel" aria-hidden="true">
+<div class="modal fade" id="modalpembayaran" tabindex="-1" role="dialog" aria-labelledby="modalpembayaranLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Total Pembayaran</label>
-                    <input type="text" name="totalbersih" id="totalbersih" class="form-control form-control-lg" value="<?= $totalbayar ?>" style="font-weight: bold; text-align:right; color:blue; font: size 24pt;" readonly>
+                    <input type="text" name="totalbersih" id="totalbersih" class="form-control form-control-lg" value="<?= $totalbayar ?>" style="font-weight: bold; text-align:right; color:blue; font: size 24;" readonly>
                 </div>
                 <div class="form-group">
                     <label for="">Jumlah Uang</label>

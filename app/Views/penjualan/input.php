@@ -109,40 +109,36 @@
 
         $('#btnHapusTransaksi').click(function(e) {
             e.preventDefault();
-            Swal.fire({
-                title: 'Batal Transaksi',
-                text: "Apakah Anda yakin untuk membatalkan transaksi?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, batalkan!',
-                cancelButtonText: 'Tidak',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        type: "post",
-                        url: "<?= site_url('penjualan/batalTransaksi') ?>",
-                        data: {
-                            nofaktur: $('#nofaktur').val()
-                        },
-                        dataType: "JSON",
-                        success: function(response) {
-                            if (response.sukses == 'berhasil') {
-                                window.location.reload()
-                            }
-                        },
-                        error: function(xhr, thrownError) {
-                            alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
-                        },
-                    });
-                }
-            })
+            batalTransaksi();
         });
 
         $('#btnSimpanTransaksi').click(function(e) {
             e.preventDefault();
             pembayaran();
+        });
+
+        $('#jumlah').keydown(function(e) {
+            if (e.keyCode == 27) {
+                e.preventDefault();
+                $('#kodebarcode').focus();
+            }
+        });
+
+        $(this).keydown(function(e) {
+            if (e.keyCode == 27) {
+                e.preventDefault();
+                $('#kodebarcode').focus();
+            }
+
+            if (e.keyCode == 115) {
+                e.preventDefault();
+                batalTransaksi();
+            }
+
+            if (e.keyCode == 119) {
+                e.preventDefault();
+                pembayaran();
+            }
         });
     });
 
@@ -167,6 +163,9 @@
                 }
                 if (response.data) {
                     $('.viewmodalpembayaran').html(response.data).show();
+                    $('#modalpembayaran').on('shown.bs.modal', function(event) {
+                        $('#jmluang').focus();
+                    });
                     $('#modalpembayaran').modal('show');
                 }
             },
@@ -268,6 +267,38 @@
         $('#kodebarcode').focus();
 
         hitungTotalBayar();
+    }
+
+    function batalTransaksi() {
+        Swal.fire({
+            title: 'Batal Transaksi',
+            text: "Apakah Anda yakin untuk membatalkan transaksi?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, batalkan!',
+            cancelButtonText: 'Tidak',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "post",
+                    url: "<?= site_url('penjualan/batalTransaksi') ?>",
+                    data: {
+                        nofaktur: $('#nofaktur').val()
+                    },
+                    dataType: "JSON",
+                    success: function(response) {
+                        if (response.sukses == 'berhasil') {
+                            window.location.reload()
+                        }
+                    },
+                    error: function(xhr, thrownError) {
+                        alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
+                    },
+                });
+            }
+        })
     }
 
     function hitungTotalBayar() {
