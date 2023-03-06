@@ -29,7 +29,7 @@ class Penjualan extends BaseController
 
     public function buatFaktur()
     {
-        $tgl = $this->request->getPost('tanggal');
+        $tgl = date('Y-m-d');
         $query = $this->db->query("SELECT MAX(jual_faktur) AS nofaktur FROM penjualan WHERE
             DATE_FORMAT(jual_tgl, '%Y-%m-%d') - '$tgl'");
         $hasil = $query->getRowArray();
