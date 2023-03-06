@@ -67,6 +67,7 @@
         $('#namaproduk').val(nama);
         $('#modalproduk').on('hidden.bs.modal', function(e) {
             $('#kodebarcode').focus();
+            cekKode();
         });
         $('#modalproduk').modal('hide');
     }
